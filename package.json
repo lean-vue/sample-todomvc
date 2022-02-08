@@ -4,6 +4,9 @@
   "scripts": {
     "format": "prettier --write . --ignore-path .gitignore"
   },
+  "dependencies": {
+    "vue": "^3.2.30"
+  },
   "devDependencies": {
     "prettier": "^2.5.1"
   }
