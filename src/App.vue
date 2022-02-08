@@ -53,15 +53,9 @@
   </section>
   <footer class="info">
     <p>Double-click to edit a todo</p>
-    <!-- Remove the below line ↓ -->
-    <p>
-      Template by
-      <a href="http://sindresorhus.com">Sindre Sorhus</a>
-    </p>
-    <!-- Change this out with your name and url ↓ -->
     <p>
       Created by
-      <a href="http://todomvc.com">you</a>
+      <a href="https://github.com/lean-stack">Micha Alt</a>
     </p>
     <p>
       Part of
