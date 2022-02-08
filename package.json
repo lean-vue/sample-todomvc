@@ -2,12 +2,16 @@
   "name": "sample-todomvc",
   "license": "MIT",
   "scripts": {
+    "dev": "vite",
+    "build": "vite build",
     "format": "prettier --write . --ignore-path .gitignore"
   },
   "dependencies": {
     "vue": "^3.2.30"
   },
   "devDependencies": {
-    "prettier": "^2.5.1"
+    "@vitejs/plugin-vue": "^2.1.0",
+    "prettier": "^2.5.1",
+    "vite": "^2.7.13"
   }
 }
