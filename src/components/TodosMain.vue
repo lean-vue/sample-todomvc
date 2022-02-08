@@ -1,6 +1,5 @@
 <template>
-  <!-- This section should be hidden by default and shown when there are todos -->
-  <section class="main">
+  <section v-if="hasTodos" class="main">
     <input id="toggle-all" class="toggle-all" type="checkbox" />
     <label for="toggle-all">Mark all as complete</label>
     <TodosList />
@@ -9,4 +8,6 @@
 
 <script setup>
 import TodosList from './TodosList.vue';
+import useAppState from '../state/app-state';
+const { hasTodos } = useAppState();
 </script>
