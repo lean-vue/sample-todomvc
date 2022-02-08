@@ -7,3 +7,6 @@ dist/
 # Cypress
 cypress/videos/
 cypress/screenshots/
+
+# Sensible data / information
+NOTES.md
