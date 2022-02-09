@@ -299,21 +299,21 @@ describe('Vue TodoMVC', () => {
     });
 
     it('should hide edit fields when not editing', () => {
-      cy.get('@todos').find('.edit').should('not.be.visible');
+      cy.get('@todos').find('.edit').should('not.exist');
     });
 
     it('should hide other controls when editing', function () {
       cy.get('@todos').eq(1).find('label').dblclick();
 
-      cy.get('@todos').eq(1).find('.toggle').should('not.be.visible');
-      cy.get('@todos').eq(1).find('label').should('not.be.visible');
+      cy.get('@todos').eq(1).find('.toggle').should('not.exist');
+      cy.get('@todos').eq(1).find('label').should('not.exist');
     });
 
     it('should allow only one editing element', () => {
       cy.get('@todos').eq(1).find('label').dblclick();
       cy.get('@todos').eq(2).find('label').dblclick();
 
-      cy.get('@todos').eq(1).find('.edit').should('not.be.visible');
+      cy.get('@todos').eq(1).find('.edit').should('not.exist');
       cy.get('@todos').eq(2).find('.edit').should('be.visible');
     });
 
