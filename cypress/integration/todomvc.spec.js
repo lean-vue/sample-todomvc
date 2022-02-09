@@ -22,8 +22,8 @@ describe('Vue TodoMVC', () => {
     });
 
     it('should hide main section and footer toolbar', function () {
-      cy.get(selectors.main).should('not.be.visible');
-      cy.get(selectors.footer).should('not.be.visible');
+      cy.get(selectors.main).should('not.exist');
+      cy.get(selectors.footer).should('not.exist');
     });
   });
 });
