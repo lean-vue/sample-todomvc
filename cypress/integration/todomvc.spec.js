@@ -11,6 +11,7 @@ describe('Vue TodoMVC', () => {
     footer: '.footer',
     newTodo: '.new-todo',
     todoItems: '.todo-list li',
+    toggleAll: '.toggle-all',
   };
 
   beforeEach(() => {
@@ -74,6 +75,56 @@ describe('Vue TodoMVC', () => {
       cy.createTodo(todoFixtures[2]);
       cy.get(selectors.todoItems).should('have.length', 3);
       cy.reload();
+      cy.get(selectors.todoItems).should('have.length', 3);
+    });
+  });
+
+  context('Mark all as completed', () => {
+    beforeEach(() => {
+      cy.createTodo(todoFixtures[0]);
+      cy.createTodo(todoFixtures[1]);
+      cy.createTodo(todoFixtures[2]);
+      cy.get(selectors.todoItems).as('todos');
+    });
+
+    it('should allow me to mark all items as completed', () => {
+      cy.get(selectors.toggleAll).check();
+
+      cy.get('@todos').eq(0).should('have.class', 'completed');
+      cy.get('@todos').eq(1).should('have.class', 'completed');
+      cy.get('@todos').eq(2).should('have.class', 'completed');
+    });
+
+    it('should allow me to clear the complete state of all items', () => {
+      cy.get(selectors.toggleAll).check();
+      cy.get(selectors.toggleAll).uncheck();
+
+      cy.get('@todos').eq(0).should('not.have.class', 'completed');
+      cy.get('@todos').eq(1).should('not.have.class', 'completed');
+      cy.get('@todos').eq(2).should('not.have.class', 'completed');
+    });
+
+    it('complete all checkbox should update state when items are completed / cleared', function () {
+      cy.get(selectors.toggleAll).should('not.be.checked');
+
+      cy.get(selectors.toggleAll).check();
+      cy.get(selectors.toggleAll).should('be.checked');
+
+      cy.get(selectors.todoItems)
+        .first()
+        .as('firstTodo')
+        .find('.toggle')
+        .uncheck();
+      cy.get(selectors.toggleAll).should('not.be.checked');
+
+      cy.get('@firstTodo').find('.toggle').check();
+      cy.get(selectors.toggleAll).should('be.checked');
+    });
+
+    it('should persist completed state of items this way', () => {
+      cy.get(selectors.toggleAll).check();
+      cy.reload();
+      cy.get(selectors.toggleAll).should('be.checked');
       cy.get(selectors.todoItems).should('have.length', 3);
     });
   });
