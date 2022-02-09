@@ -15,6 +15,8 @@ describe('Vue TodoMVC', () => {
     lastTodo: '.todo-list li:last-child()',
     count: 'span.todo-count',
     clearCompleted: '.clear-completed',
+    filters: '.filters',
+    filterItems: '.filters li a',
   };
 
   beforeEach(() => {
@@ -422,6 +424,96 @@ describe('Vue TodoMVC', () => {
       cy.get('@todos').first().find('.toggle').check();
       cy.get(selectors.clearCompleted).should('be.visible').click();
       cy.get(selectors.clearCompleted).should('not.exist');
+    });
+  });
+
+  context('Routing', () => {
+    beforeEach(() => {
+      cy.createTodo(todoFixtures[0]);
+      cy.createTodo(todoFixtures[1]);
+      cy.createTodo(todoFixtures[2]);
+      cy.get(selectors.todoItems).as('todos');
+    });
+
+    it('should allow me to display active items', () => {
+      cy.get('@todos').eq(1).find('.toggle').check();
+      cy.contains(selectors.filterItems, 'Active').click();
+      cy.get(selectors.todoItems)
+        .should('have.length', 2)
+        .first()
+        .should('contain', todoFixtures[0]);
+      cy.get(selectors.todoItems).eq(1).should('contain', todoFixtures[2]);
+    });
+
+    it('should allow me to display completed items', () => {
+      cy.get('@todos').eq(1).find('.toggle').check();
+      cy.get(selectors.filters).contains('Completed').click();
+      cy.get(selectors.todoItems).should('have.length', 1);
+    });
+
+    it('should allow me to display all items', () => {
+      cy.get('@todos').eq(1).find('.toggle').check();
+      cy.get(selectors.filters).contains('Active').click();
+      cy.get(selectors.filters).contains('Completed').click();
+      cy.get(selectors.filters).contains('All').click();
+      cy.get(selectors.todoItems).should('have.length', 3);
+    });
+
+    it('should highlight the currently applied filter', () => {
+      cy.contains(selectors.filterItems, 'All').should(
+        'have.class',
+        'selected'
+      );
+
+      cy.contains(selectors.filterItems, 'Active').click();
+      cy.contains(selectors.filterItems, 'Active').should(
+        'have.class',
+        'selected'
+      );
+
+      cy.contains(selectors.filterItems, 'Completed').click();
+      cy.contains(selectors.filterItems, 'Completed').should(
+        'have.class',
+        'selected'
+      );
+    });
+
+    it('should respect the back button', function () {
+      cy.get('@todos').first().find('.toggle').check();
+
+      cy.log('Showing all items');
+      cy.contains(selectors.filterItems, 'All').click();
+      cy.log('Showing active items');
+      cy.contains(selectors.filterItems, 'Active').click();
+      cy.log('Showing completed items');
+      cy.contains(selectors.filterItems, 'Completed').click();
+
+      cy.log('Back to active items');
+      cy.go('back');
+      cy.get(selectors.todoItems).should('have.length', 2);
+
+      cy.log('Back to all items');
+      cy.go('back');
+      cy.get(selectors.todoItems).should('have.length', 3);
+    });
+
+    it('should respect bookmarking/initial routing', () => {
+      cy.get('@todos').first().find('.toggle').check();
+
+      cy.log('Showing active items');
+      cy.contains(selectors.filterItems, 'Active').click();
+      cy.reload();
+      cy.get(selectors.todoItems).should('have.length', 2);
+
+      cy.log('Showing completed items');
+      cy.contains(selectors.filterItems, 'Completed').click();
+      cy.reload();
+      cy.get(selectors.todoItems).should('have.length', 1);
+
+      cy.log('Showing all items');
+      cy.contains(selectors.filterItems, 'All').click();
+      cy.reload();
+      cy.get(selectors.todoItems).should('have.length', 3);
     });
   });
 });
