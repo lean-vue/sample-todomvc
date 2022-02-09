@@ -15,7 +15,11 @@ const state = reactive(initialState);
 // Getters
 
 const hasTodos = computed(() => state.todos.length > 0);
+const hasCompletedTodos = computed(() => state.todos.some((t) => t.completed));
 const allDone = computed(() => !state.todos.some((t) => !t.completed));
+const activeCount = computed(() =>
+  state.todos.reduce((count, t) => (t.completed ? count : count + 1), 0)
+);
 
 const filteredTodos = computed(() =>
   state.filter === 'all'
@@ -60,6 +64,13 @@ const syncAllCompletedStates = async (completed) => {
   todos.forEach((t) => (t.completed = completed));
 };
 
+const clearCompleted = async () => {
+  await Promise.all(
+    state.todos.filter((t) => t.completed).map((t) => persistence.destroy(t.id))
+  );
+  state.todos = state.todos.filter((t) => !t.completed);
+};
+
 //
 // Composition API Method
 
@@ -68,7 +79,9 @@ const useAppState = () => {
     /* Getters */
     filteredTodos,
     hasTodos,
+    hasCompletedTodos,
     allDone,
+    activeCount,
     /* Actions */
     initialize,
     createTodo,
@@ -76,6 +89,7 @@ const useAppState = () => {
     updateTodoTitle,
     destroyTodo,
     syncAllCompletedStates,
+    clearCompleted,
   };
 };
 

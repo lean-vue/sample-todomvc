@@ -1,8 +1,8 @@
 <template>
   <footer v-if="hasTodos" class="footer">
-    <!-- This should be `0 items left` by default -->
     <span class="todo-count">
-      <strong>0</strong> item left
+      <strong>{{ activeCount }}</strong>
+      {{ activeCount === 1 ? 'item' : 'items' }} left
     </span>
     <!-- Remove this if you don't implement routing -->
     <ul class="filters">
@@ -16,13 +16,12 @@
         <a href="#/completed">Completed</a>
       </li>
     </ul>
-    <!-- Hidden if no completed items are left ↓ -->
-    <button class="clear-completed">Clear completed</button>
+    <button v-if="hasCompletedTodos" class="clear-completed" @click="clearCompleted">Clear completed</button>
   </footer>
 </template>
 
 <script setup>
 import useAppState from '@/state/app-state';
 
-const { hasTodos } = useAppState();
+const { hasTodos, activeCount, hasCompletedTodos, clearCompleted } = useAppState();
 </script>
