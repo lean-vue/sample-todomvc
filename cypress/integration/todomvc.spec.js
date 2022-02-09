@@ -12,6 +12,7 @@ describe('Vue TodoMVC', () => {
     newTodo: '.new-todo',
     todoItems: '.todo-list li',
     toggleAll: '.toggle-all',
+    lastTodo: '.todo-list li:last-child()',
   };
 
   beforeEach(() => {
@@ -126,6 +127,166 @@ describe('Vue TodoMVC', () => {
       cy.reload();
       cy.get(selectors.toggleAll).should('be.checked');
       cy.get(selectors.todoItems).should('have.length', 3);
+    });
+  });
+
+  context('Item', () => {
+    it('should allow me to mark items as complete', () => {
+      cy.createTodo(todoFixtures[0]).as('firstTodo');
+      cy.createTodo(todoFixtures[1]).as('secondTodo');
+
+      cy.get('@firstTodo').find('.toggle').check();
+      cy.get('@firstTodo').should('have.class', 'completed');
+      cy.get('@secondTodo').should('not.have.class', 'completed');
+
+      cy.get('@secondTodo').find('.toggle').check();
+      cy.get('@firstTodo').should('have.class', 'completed');
+      cy.get('@secondTodo').should('have.class', 'completed');
+    });
+
+    it('should allow me to un-mark items as complete', () => {
+      cy.createTodo(todoFixtures[0]).as('firstTodo');
+      cy.createTodo(todoFixtures[1]).as('secondTodo');
+
+      cy.get('@firstTodo').find('.toggle').check();
+      cy.get('@firstTodo').should('have.class', 'completed');
+      cy.get('@secondTodo').should('not.have.class', 'completed');
+
+      cy.get('@firstTodo').find('.toggle').uncheck();
+      cy.get('@firstTodo').should('not.have.class', 'completed');
+      cy.get('@secondTodo').should('not.have.class', 'completed');
+    });
+
+    it('should allow me to edit an item', () => {
+      cy.createTodo(todoFixtures[0]);
+      cy.createTodo(todoFixtures[1]).as('todo');
+
+      cy.get('@todo').find('label').dblclick();
+      cy.get('@todo')
+        .find('.edit')
+        .should('have.value', todoFixtures[1])
+        .clear()
+        .type('E2E Testing with Cypress{enter}');
+      cy.get('@todo')
+        .find('label')
+        .should('contain.text', 'E2E Testing with Cypress');
+    });
+
+    it('should save edits on blur', function () {
+      cy.createTodo(todoFixtures[0]);
+      cy.createTodo(todoFixtures[1]).as('todo');
+
+      cy.get('@todo').find('label').dblclick();
+      cy.get('@todo')
+        .find('.edit')
+        .should('have.value', todoFixtures[1])
+        .clear()
+        .type('E2E Testing with Cypress')
+        .blur();
+      cy.get('@todo')
+        .find('label')
+        .should('contain.text', 'E2E Testing with Cypress');
+    });
+
+    it('should allow me to delete an item', () => {
+      cy.createTodo(todoFixtures[0]).as('todo');
+      cy.createTodo(todoFixtures[1]);
+
+      cy.get('@todo').find('.destroy').click({ force: true });
+      cy.get(selectors.todoItems).should('have.length', 1);
+      cy.get(selectors.todoItems).first().contains(todoFixtures[1]);
+    });
+
+    it('should remove the item if an empty text string was entered', () => {
+      cy.createTodo(todoFixtures[0]).as('firstTodo');
+      cy.createTodo(todoFixtures[1]).as('secondTodo');
+
+      cy.get('@secondTodo').find('label').dblclick();
+      cy.get('@secondTodo').find('.edit').clear().type('{enter}');
+
+      cy.get(selectors.todoItems).should('have.length', 1);
+      cy.get(selectors.todoItems).first().contains(todoFixtures[0]);
+
+      cy.get('@firstTodo').find('label').dblclick();
+      cy.get('@firstTodo').find('.edit').clear().blur();
+
+      cy.get(selectors.todoItems).should('have.length', 0);
+    });
+
+    it('should persist marking/un-marking of items as complete', () => {
+      cy.createTodo(todoFixtures[0]);
+      cy.createTodo(todoFixtures[1]);
+
+      cy.get(selectors.lastTodo).find('.toggle').check();
+      cy.reload();
+      cy.get(selectors.lastTodo).should('have.class', 'completed');
+
+      cy.get(selectors.lastTodo).find('.toggle').uncheck();
+      cy.reload();
+      cy.get(selectors.lastTodo).should('not.have.class', 'completed');
+    });
+
+    it('should persist editing of items', () => {
+      cy.createTodo(todoFixtures[0]);
+      cy.createTodo(todoFixtures[1]);
+
+      cy.get(selectors.lastTodo).find('label').dblclick();
+      cy.get(selectors.lastTodo)
+        .last()
+        .find('.edit')
+        .clear()
+        .type('E2E Testing with Cypress{enter}');
+      cy.reload();
+
+      cy.contains(
+        '.todo-list li:last-child() label',
+        'E2E Testing with Cypress'
+      );
+    });
+
+    it('should persist edits commited via blur', function () {
+      cy.createTodo(todoFixtures[0]);
+      cy.createTodo(todoFixtures[1]);
+
+      cy.get(selectors.todoItems).last().find('label').dblclick();
+      cy.get(selectors.todoItems)
+        .last()
+        .find('.edit')
+        .clear()
+        .type('E2E Testing with Cypress')
+        .blur();
+      cy.reload();
+
+      cy.contains(
+        '.todo-list li:last-child() label',
+        'E2E Testing with Cypress'
+      );
+    });
+
+    it('should persist deleting items', () => {
+      cy.createTodo(todoFixtures[0]).as('todo');
+      cy.createTodo(todoFixtures[1]);
+
+      cy.get('@todo').find('.destroy').invoke('show').click();
+      cy.reload();
+      cy.get(selectors.todoItems).should('have.length', 1);
+    });
+
+    it('should persist deleting items via empty edit text', () => {
+      cy.createTodo(todoFixtures[0]);
+      cy.createTodo(todoFixtures[1]);
+
+      cy.get(selectors.todoItems).first().find('label').dblclick();
+      cy.get(selectors.todoItems).first().find('.edit').clear().type('{enter}');
+      cy.reload();
+
+      cy.get(selectors.todoItems).should('have.length', 1);
+
+      cy.contains('.todo-list li:last-child() label', 'E2E Testing').dblclick();
+      cy.get(selectors.todoItems).find('.edit').clear().blur();
+      cy.reload();
+
+      cy.get(selectors.todoItems).should('have.length', 0);
     });
   });
 });
