@@ -418,10 +418,10 @@ describe('Vue TodoMVC', () => {
     });
 
     it('should be hidden when there are no items that are completed', () => {
-      cy.get(selectors.clearCompleted).should('not.be.visible');
+      cy.get(selectors.clearCompleted).should('not.exist');
       cy.get('@todos').first().find('.toggle').check();
       cy.get(selectors.clearCompleted).should('be.visible').click();
-      cy.get(selectors.clearCompleted).should('not.be.visible');
+      cy.get(selectors.clearCompleted).should('not.exist');
     });
   });
 });
