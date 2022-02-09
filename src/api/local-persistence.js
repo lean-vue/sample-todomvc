@@ -22,7 +22,7 @@ const saveTodos = (todos) => (localStorage.todos = JSON.stringify(todos));
 const generateId = () => {
   /** @type {number} */
   const nextId = JSON.parse(localStorage.lastId || '0') + 1;
-  JSON.lastId = nextId;
+  localStorage.lastId = nextId;
   return nextId;
 };
 
