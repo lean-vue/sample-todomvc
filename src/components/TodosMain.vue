@@ -7,7 +7,7 @@
 </template>
 
 <script setup>
-import TodosList from './TodosList.vue';
-import useAppState from '../state/app-state';
+import TodosList from '@/components/TodosList.vue';
+import useAppState from '@/state/app-state';
 const { hasTodos } = useAppState();
 </script>

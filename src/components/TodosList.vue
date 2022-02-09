@@ -5,6 +5,6 @@
 </template>
 
 <script setup>
-import TodosItem from './TodosItem.vue';
+import TodosItem from '@/components/TodosItem.vue';
 
 </script>

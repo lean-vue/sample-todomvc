@@ -22,7 +22,7 @@
 </template>
 
 <script setup>
-import useAppState from '../state/app-state';
+import useAppState from '@/state/app-state';
 
 const { hasTodos } = useAppState();
 </script>

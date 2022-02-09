@@ -10,8 +10,8 @@
 </template>
 
 <script setup>
-import TodosInput from './TodosInput.vue';
-import TodosMain from './TodosMain.vue';
-import TodosActionbar from './TodosActionbar.vue';
+import TodosInput from '@/components/TodosInput.vue';
+import TodosMain from '@/components/TodosMain.vue';
+import TodosActionbar from '@/components/TodosActionbar.vue';
 
 </script>

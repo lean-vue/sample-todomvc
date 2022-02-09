@@ -14,5 +14,5 @@
 </template>
 
 <script setup>
-import TodosShell from './components/TodosShell.vue';
+import TodosShell from '@/components/TodosShell.vue';
 </script>
