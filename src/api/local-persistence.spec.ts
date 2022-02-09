@@ -38,4 +38,10 @@ describe('Local Persistence implementation', () => {
     const todos = await persistence.getAll();
     expect(todos.length).toBe(0);
   });
+
+  test('creates unique ids', async () => {
+    const { id: id1 } = await persistence.create('One');
+    const { id: id2 } = await persistence.create('Two');
+    expect(id1).not.toBe(id2);
+  });
 });
