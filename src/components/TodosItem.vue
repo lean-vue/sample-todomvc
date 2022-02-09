@@ -1,24 +1,38 @@
 <template>
-  <!-- List items should get the class `editing` when editing and `completed` when marked as completed -->
-  <li :class="{ completed: todo.completed }">
+  <li :class="{ completed: todo.completed, editing: editMode }">
     <div class="view">
       <input class="toggle" type="checkbox" :checked="todo.completed" @change="toggleTodo(todo)" />
-      <label>{{ todo.title }}</label>
-      <button class="destroy"></button>
+      <label @dblclick="beginEdit">{{ todo.title }}</label>
+      <button class="destroy" @click="destroyTodo(todo.id)"></button>
     </div>
-    <input class="edit" value="Create a TodoMVC template" />
+    <input v-model="editTitle" class="edit" @keyup.enter="commitEdit" @blur="commitEdit" />
   </li>
 </template>
 
 <script setup>
 import useAppState from '@/state/app-state';
+import { ref } from 'vue';
 
-defineProps({
+const props = defineProps({
   todo: {
     type: Object,
     required: true
   }
 });
 
-const { toggleTodo } = useAppState();
+const { toggleTodo, updateTodoTitle, destroyTodo } = useAppState();
+
+// Editing Feature
+const editMode = ref(false);
+const editTitle = ref(props.todo.title);
+
+const beginEdit = () => editMode.value = true;
+const commitEdit = () => {
+  if (editTitle.value.length > 0) {
+    updateTodoTitle(props.todo.id, editTitle.value);
+  } else {
+    destroyTodo(props.todo.id);
+  }
+  editMode.value = false;
+}
 </script>

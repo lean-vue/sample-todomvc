@@ -42,6 +42,18 @@ const toggleTodo = async (todo) => {
   state.todos = state.todos.map((t) => (t.id === todo.id ? updatedTodo : t));
 };
 
+const updateTodoTitle = async (id, title) => {
+  const updatedTodo = await persistence.update(id, {
+    title,
+  });
+  state.todos = state.todos.map((t) => (t.id === id ? updatedTodo : t));
+};
+
+const destroyTodo = async (id) => {
+  await persistence.destroy(id);
+  state.todos = state.todos.filter((t) => t.id !== id);
+};
+
 const syncAllCompletedStates = async (completed) => {
   const todos = state.todos.filter((t) => t.completed !== completed);
   await Promise.all(todos.map((t) => persistence.update(t.id, { completed })));
@@ -61,6 +73,8 @@ const useAppState = () => {
     initialize,
     createTodo,
     toggleTodo,
+    updateTodoTitle,
+    destroyTodo,
     syncAllCompletedStates,
   };
 };
