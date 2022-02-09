@@ -289,4 +289,65 @@ describe('Vue TodoMVC', () => {
       cy.get(selectors.todoItems).should('have.length', 0);
     });
   });
+
+  context('Editing', () => {
+    beforeEach(() => {
+      cy.createTodo(todoFixtures[0]);
+      cy.createTodo(todoFixtures[1]);
+      cy.createTodo(todoFixtures[2]);
+      cy.get(selectors.todoItems).as('todos');
+    });
+
+    it('should hide edit fields when not editing', () => {
+      cy.get('@todos').find('.edit').should('not.be.visible');
+    });
+
+    it('should hide other controls when editing', function () {
+      cy.get('@todos').eq(1).find('label').dblclick();
+
+      cy.get('@todos').eq(1).find('.toggle').should('not.be.visible');
+      cy.get('@todos').eq(1).find('label').should('not.be.visible');
+    });
+
+    it('should allow only one editing element', () => {
+      cy.get('@todos').eq(1).find('label').dblclick();
+      cy.get('@todos').eq(2).find('label').dblclick();
+
+      cy.get('@todos').eq(1).find('.edit').should('not.be.visible');
+      cy.get('@todos').eq(2).find('.edit').should('be.visible');
+    });
+
+    it('should focus on the edited todo after entering edit mode', () => {
+      cy.get('@todos').eq(1).find('label').dblclick();
+      cy.get('@todos').eq(1).find('.edit').should('have.focus');
+    });
+
+    it('should trim entered text', () => {
+      cy.get('@todos').eq(1).find('label').dblclick();
+
+      cy.get('@todos')
+        .eq(1)
+        .find('.edit')
+        .type('{selectall}{backspace}    E2E Testing with Cypress    {enter}');
+
+      cy.get('@todos')
+        .eq(1)
+        .find('label')
+        .should('have.text', 'E2E Testing with Cypress');
+    });
+
+    it('should cancel edits on escape', () => {
+      cy.get('@todos').eq(1).find('label').dblclick();
+
+      cy.get('@todos')
+        .eq(1)
+        .find('.edit')
+        .type('{selectall}{backspace}Protractor Testing{esc}');
+
+      cy.get('@todos')
+        .eq(1)
+        .find('label')
+        .should('contain.text', todoFixtures[1]);
+    });
+  });
 });
