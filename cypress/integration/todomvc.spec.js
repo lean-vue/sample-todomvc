@@ -13,6 +13,8 @@ describe('Vue TodoMVC', () => {
     todoItems: '.todo-list li',
     toggleAll: '.toggle-all',
     lastTodo: '.todo-list li:last-child()',
+    count: 'span.todo-count',
+    clearCompleted: '.clear-completed',
   };
 
   beforeEach(() => {
@@ -348,6 +350,78 @@ describe('Vue TodoMVC', () => {
         .eq(1)
         .find('label')
         .should('contain.text', todoFixtures[1]);
+    });
+  });
+
+  context('Counter', () => {
+    it('should display the current number of todo items', function () {
+      cy.createTodo(todoFixtures[0]).as('firstTodo');
+      cy.get(selectors.count).contains('1');
+      cy.createTodo(todoFixtures[1]).as('secondTodo');
+      cy.get(selectors.count).contains('2');
+      cy.createTodo(todoFixtures[2]).as('thirdTodo');
+      cy.get(selectors.count).contains('3');
+      cy.get('@firstTodo').find('.toggle').check();
+      cy.get(selectors.count).contains('2');
+      cy.get('@firstTodo').find('.destroy').click({ force: true });
+      cy.get(selectors.count).contains('2');
+      cy.get('@secondTodo').find('.destroy').click({ force: true });
+      cy.get(selectors.count).contains('1');
+    });
+
+    it('should pluralize the item-word', () => {
+      cy.createTodo(todoFixtures[0]).as('firstTodo');
+      cy.get('@firstTodo').find('.toggle').check();
+      cy.get(selectors.count).contains('0 items left');
+      cy.get('@firstTodo').find('.toggle').uncheck();
+      cy.get(selectors.count).contains('1 item left');
+      cy.createTodo(todoFixtures[1]);
+      cy.get(selectors.count).contains('2 items left');
+      cy.createTodo(todoFixtures[2]);
+      cy.get(selectors.count).contains('3 items left');
+    });
+  });
+
+  context('Clear completed button', () => {
+    beforeEach(() => {
+      cy.createTodo(todoFixtures[0]);
+      cy.createTodo(todoFixtures[1]);
+      cy.createTodo(todoFixtures[2]);
+      cy.createTodo(todoFixtures[3]);
+      cy.get(selectors.todoItems).as('todos');
+    });
+
+    it('should be visible if there are completed todos', () => {
+      cy.get('@todos').first().find('.toggle').check();
+      cy.get(selectors.clearCompleted).should('be.visible');
+    });
+
+    it('should remove completed items when clicked', () => {
+      cy.get('@todos').eq(0).find('.toggle').check();
+      cy.get('@todos').eq(1).find('.toggle').check();
+      cy.get('@todos').eq(3).find('.toggle').check();
+      cy.get(selectors.clearCompleted).click();
+      cy.get('@todos').should('have.length', 1);
+      cy.get('@todos').eq(0).should('contain', todoFixtures[2]);
+    });
+
+    it('should persist items when removed this way', () => {
+      cy.get('@todos').eq(0).find('.toggle').check();
+      cy.get('@todos').eq(1).find('.toggle').check();
+      cy.get('@todos').eq(3).find('.toggle').check();
+      cy.get(selectors.clearCompleted).click();
+      cy.get('@todos').should('have.length', 1);
+      cy.get('@todos').eq(0).should('contain', todoFixtures[2]);
+      cy.reload();
+      cy.get('@todos').should('have.length', 1);
+      cy.contains('.todo-list li:last-child() label', todoFixtures[2]);
+    });
+
+    it('should be hidden when there are no items that are completed', () => {
+      cy.get(selectors.clearCompleted).should('not.be.visible');
+      cy.get('@todos').first().find('.toggle').check();
+      cy.get(selectors.clearCompleted).should('be.visible').click();
+      cy.get(selectors.clearCompleted).should('not.be.visible');
     });
   });
 });
