@@ -1,7 +1,7 @@
 {
   "name": "sample-todomvc",
   "license": "MIT",
-  "version": "0.6.3",
+  "version": "1.0.0",
   "scripts": {
     "dev": "vite",
     "format": "prettier --write . --ignore-path .gitignore",
@@ -28,6 +28,6 @@
     "jsdom": "^19.0.0",
     "prettier": "^2.5.1",
     "vite": "^2.7.13",
-    "vitest": "^0.2.8"
+    "vitest": "^0.3.2"
   }
 }
