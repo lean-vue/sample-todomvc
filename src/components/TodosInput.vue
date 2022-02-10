@@ -1,16 +1,17 @@
 <template>
   <input
+    ref="fld"
     v-model.trim="title"
     class="new-todo"
     placeholder="What needs to be done?"
-    autofocus
     @keyup.enter="handleEnter"
   />
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import { onMounted, ref } from 'vue';
 
+const fld = ref(null);
 const title = ref('');
 const emit = defineEmits({
   create(title) { return title.length > 0; }
@@ -22,4 +23,6 @@ const handleEnter = () => {
   }
   title.value = '';
 }
+
+onMounted(() => { fld.value.focus(); })
 </script>
