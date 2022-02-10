@@ -10,7 +10,8 @@
 </template>
 
 <script setup>
-import { onMounted } from 'vue';
+import { onMounted, watchEffect } from 'vue';
+import { useRoute, useRouter } from "vue-router";
 
 import TodosInput from '@/components/TodosInput.vue';
 import TodosMain from '@/components/TodosMain.vue';
@@ -18,10 +19,21 @@ import TodosActionbar from '@/components/TodosActionbar.vue';
 
 import useAppState from '@/state/app-state';
 
-const { initialize, createTodo } = useAppState();
-
+// State
+const { initialize, createTodo, setVisibility } = useAppState();
 onMounted(() => {
   initialize();
 });
 
+// Routing
+const router = useRouter();
+const route = useRoute();
+watchEffect(() => {
+  const filter = route.params.filter || 'all';
+  if (!['all', 'active', 'completed'].includes(filter)) {
+    router.replace('/');
+    return;
+  }
+  setVisibility(filter);
+});
 </script>

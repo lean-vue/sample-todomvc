@@ -7,13 +7,13 @@
     <!-- Remove this if you don't implement routing -->
     <ul class="filters">
       <li>
-        <a class="selected" href="#/">All</a>
+        <RouterLink :class="{ selected: filter === 'all' }" to="/">All</RouterLink>
       </li>
       <li>
-        <a href="#/active">Active</a>
+        <RouterLink :class="{ selected: filter === 'active' }" to="/active">Active</RouterLink>
       </li>
       <li>
-        <a href="#/completed">Completed</a>
+        <RouterLink :class="{ selected: filter === 'completed' }" to="/completed">Completed</RouterLink>
       </li>
     </ul>
     <button v-if="hasCompletedTodos" class="clear-completed" @click="clearCompleted">Clear completed</button>
@@ -23,5 +23,5 @@
 <script setup>
 import useAppState from '@/state/app-state';
 
-const { hasTodos, activeCount, hasCompletedTodos, clearCompleted } = useAppState();
+const { hasTodos, activeCount, hasCompletedTodos, clearCompleted, filter } = useAppState();
 </script>

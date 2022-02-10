@@ -1,5 +1,5 @@
 <template>
-  <TodosShell />
+  <RouterView />
   <footer class="info">
     <p>Double-click to edit a todo</p>
     <p>
@@ -12,7 +12,3 @@
     </p>
   </footer>
 </template>
-
-<script setup>
-import TodosShell from '@/components/TodosShell.vue';
-</script>
