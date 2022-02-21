@@ -24,7 +24,10 @@ class LocalPersistence implements Persistence {
 
   async update(id: number, changes: Partial<Omit<Todo, 'id'>>) {
     const todos = loadTodos();
-    const todo: Todo = { ...todos.find((t) => t.id === id), ...changes };
+    const todo: Todo = {
+      ...(todos.find((t) => t.id === id) as Todo),
+      ...changes,
+    };
     saveTodos(todos.map((t) => (t.id === id ? todo : t)));
     return todo;
   }
