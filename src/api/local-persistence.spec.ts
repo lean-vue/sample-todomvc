@@ -1,13 +1,14 @@
 import { beforeEach, describe, expect, test } from 'vitest';
 import LocalPersistence from './local-persistence';
+import Persistence from './persistence';
 
 const mockTitle = 'Unit Teting';
 const mockUpdatedTitle = 'Unit Testing';
 
 describe('Local Persistence implementation', () => {
-  let persistence = new LocalPersistence();
+  let persistence: Persistence;
   let createdId = 0;
-  7;
+
   beforeEach(() => {
     persistence = new LocalPersistence();
   });
