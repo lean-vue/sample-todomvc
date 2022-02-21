@@ -26,7 +26,7 @@ const generateId = () => {
   return nextId;
 };
 
-class LocalPersistence extends Persistence {
+class LocalPersistence implements Persistence {
   /**
    * @returns {Promise<Todo[]>}
    */
