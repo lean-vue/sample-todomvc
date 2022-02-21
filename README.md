@@ -2,8 +2,12 @@
 
 > Vue Implementation for https://todomvc.com
 
+## Ausgangspunkt:
+
 Dieses Projekt dient als Startpunkt für eine Beispiel-Implementierung. Der [main](https://github.com/lean-vue/sample-todomvc/tree/main)-Branch enthält eine minimale Vue-Anwendung mit dem statischen
 Template der TodoMVC-Anwendung (kopiert von [tastejs/todomvc-app-template](https://github.com/tastejs/todomvc-app-template)) sowie eine komplette E2E-Testsuite mit Cypress als Framework.
+
+Auf dem [ts-starter](https://github.com/lean-vue/sample-todomvc/tree/ts-starter)-Branch ist ein Startpunkt mit vorkonfiguriertem TypeScript-Support.
 
 ## Fertige Implementierungen:
 
