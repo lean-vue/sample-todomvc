@@ -2,7 +2,7 @@
   <section class="todoapp">
     <header class="header">
       <h1>todos</h1>
-      <input class="new-todo" placeholder="What needs to be done?" autofocus/>
+      <TodosInput/>
     </header>
     <!-- This section should be hidden by default and shown when there are todos -->
     <section class="main">
@@ -54,5 +54,5 @@
 </template>
 
 <script lang="ts" setup>
-
+import TodosInput from "@/components/TodosInput.vue";
 </script>
