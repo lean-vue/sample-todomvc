@@ -1,1 +1,6 @@
-{}
+{
+  "includes": ["src/**/*", "src/**/.vue"],
+  "compilerOptions": {
+    "skipLibCheck": true
+  }
+}
