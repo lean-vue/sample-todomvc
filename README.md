@@ -1,6 +1,12 @@
 # Sample: TodoMVC
 
-> Vue Implementation for https://todomvc.com
+> Vue Implementation for https://todomvc.com with TypeScript
+
+## TypeScript-Konfiguration
+
+Die Konfiguration im Branch wächst progressiv. Es fehlen noch ein paar
+best-practices - aber auch Notwendigkeiten, die an gegebener Stelle eingeführt
+und erklärt werden.
 
 ## Ausgangspunkt:
 
