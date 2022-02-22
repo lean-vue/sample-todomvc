@@ -1,25 +1,43 @@
 <script lang="ts" setup>
 import Todo from '@/model/todo';
 import useAppStore from '@/store/use-app-store';
+import { ref } from 'vue';
 
-defineProps<{ todo: Todo }>();
+const props = defineProps<{ todo: Todo }>();
 
-const { toggleTodo } = useAppStore();
+const { toggleTodo, updateTitle } = useAppStore();
+
+// Editing
+const editMode = ref(false);
+const editTitle = ref('');
+
+const beginEdit = () => {
+  editTitle.value = props.todo.title;
+  editMode.value = true;
+};
+const commitEdit = () => {
+  updateTitle(props.todo, editTitle.value);
+  editMode.value = false;
+};
 </script>
 
 <template>
-  <!-- List items should get the class `editing` when editing -->
-  <li :class="{ completed: todo.completed }">
-    <div class="view">
+  <li :class="{ completed: todo.completed, editing: editMode }">
+    <input
+      v-if="editMode"
+      v-model="editTitle"
+      class="edit"
+      @change="commitEdit"
+    />
+    <div v-else class="view">
       <input
         class="toggle"
         type="checkbox"
         :checked="todo.completed"
         @change="toggleTodo(todo)"
       />
-      <label>{{ todo.title }}</label>
+      <label @dblclick="beginEdit">{{ todo.title }}</label>
       <button class="destroy"></button>
     </div>
-    <input class="edit" value="Create a TodoMVC template" />
   </li>
 </template>
