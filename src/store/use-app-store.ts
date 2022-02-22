@@ -9,6 +9,14 @@ const state = {
   visibility: ref<'all' | 'active' | 'completed'>('all'),
 };
 
+// helper
+const filterTodosByVisibility = () =>
+  state.visibility.value === 'all'
+    ? state.todos.value
+    : state.todos.value.filter(
+        (t) => t.completed === (state.visibility.value === 'completed')
+      );
+
 // actions
 const createTodo = async (title: string) => {
   const todo = await persistence.create(title);
@@ -16,12 +24,14 @@ const createTodo = async (title: string) => {
 };
 
 // computed getters
+const filteredTodos = computed(filterTodosByVisibility);
 const hasTodos = computed(() => state.todos.value.length > 0);
 
 const useAppStore = () => ({
   // actions
   createTodo,
   // getters
+  filteredTodos,
   hasTodos,
 });
 
