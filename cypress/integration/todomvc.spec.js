@@ -23,7 +23,7 @@ describe('Vue TodoMVC', () => {
     cy.visit('/');
   });
 
-  context('When page is initially opened', () => {
+  context.skip('When page is initially opened', () => {
     it('should focus on the todo input field', () => {
       cy.focused().should('have.class', selectors.newTodo.slice(1));
     });
