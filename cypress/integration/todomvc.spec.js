@@ -84,7 +84,7 @@ describe('Vue TodoMVC', () => {
     });
   });
 
-  context('Mark all as completed', () => {
+  context.skip('Mark all as completed', () => {
     beforeEach(() => {
       cy.createTodo(todoFixtures[0]);
       cy.createTodo(todoFixtures[1]);
