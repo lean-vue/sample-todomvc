@@ -23,8 +23,8 @@ describe('TodosInput', () => {
     await input.setValue('Unit Testing');
     await input.trigger('keyup.enter');
 
-    const createEvent = wrapper.emitted('create')!;
-    expect(createEvent[0]).toEqual(['Unit Testing']);
+    const createEvent = wrapper.emitted<string>('create');
+    expect(createEvent && createEvent[0]).toEqual(['Unit Testing']);
   });
 
   test('should trim the entered title', async () => {
@@ -35,8 +35,8 @@ describe('TodosInput', () => {
     await input.setValue('  Unit Testing  ');
     await input.trigger('keyup.enter');
 
-    const createEvent = wrapper.emitted('create')!;
-    expect(createEvent[0]).toEqual(['Unit Testing']);
+    const createEvent = wrapper.emitted<string>('create');
+    expect(createEvent && createEvent[0]).toEqual(['Unit Testing']);
   });
 
   test('should not trigger event on empty or space only titles', async () => {
