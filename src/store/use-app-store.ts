@@ -25,6 +25,14 @@ const createTodo = async (title: string) => {
   const todo = await persistence.create(title);
   state.todos.value = [...state.todos.value, todo];
 };
+const toggleTodo = async (todo: Todo) => {
+  const updatedTodo = await persistence.update(todo.id, {
+    completed: !todo.completed,
+  });
+  state.todos.value = state.todos.value.map((t) =>
+    t.id === todo.id ? updatedTodo : t
+  );
+};
 
 // computed getters
 const filteredTodos = computed(filterTodosByVisibility);
@@ -33,6 +41,7 @@ const hasTodos = computed(() => state.todos.value.length > 0);
 const useAppStore = () => ({
   // actions
   createTodo,
+  toggleTodo,
   // getters
   filteredTodos,
   hasTodos,
