@@ -1,22 +1,34 @@
 <script lang="ts" setup>
 import Todo from '@/model/todo';
 import useAppStore from '@/store/use-app-store';
-import { ref } from 'vue';
+import { nextTick, ref } from 'vue';
 
 const props = defineProps<{ todo: Todo }>();
 
 const { toggleTodo, updateTitle, destroyTodo } = useAppStore();
 
 // Editing
+const editFld = ref<HTMLInputElement>();
 const editMode = ref(false);
 const editTitle = ref('');
 
 const beginEdit = () => {
   editTitle.value = props.todo.title;
   editMode.value = true;
+  nextTick(() => {
+    editFld.value?.focus();
+  });
 };
 const commitEdit = () => {
-  updateTitle(props.todo, editTitle.value);
+  const title = editTitle.value;
+  if (title) {
+    updateTitle(props.todo, editTitle.value);
+  } else {
+    destroyTodo(props.todo);
+  }
+  editMode.value = false;
+};
+const cancelEdit = () => {
   editMode.value = false;
 };
 </script>
@@ -25,9 +37,11 @@ const commitEdit = () => {
   <li :class="{ completed: todo.completed, editing: editMode }">
     <input
       v-if="editMode"
-      v-model="editTitle"
+      ref="editFld"
+      v-model.trim="editTitle"
       class="edit"
       @change="commitEdit"
+      @blur="cancelEdit"
     />
     <div v-else class="view">
       <input
