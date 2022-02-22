@@ -1,10 +1,12 @@
 <script lang="ts" setup>
 import TodosList from '@/components/TodosList.vue';
+import useAppStore from '@/store/use-app-store';
+
+const { hasTodos } = useAppStore();
 </script>
 
 <template>
-  <!-- This section should be hidden by default and shown when there are todos -->
-  <section class="main">
+  <section v-if="hasTodos" class="main">
     <input id="toggle-all" class="toggle-all" type="checkbox" />
     <label for="toggle-all">Mark all as complete</label>
     <TodosList />
