@@ -7,8 +7,8 @@ import Todo from '@/model/todo';
 interface Persistence {
   getAll(): Promise<Todo[]>;
   create(title: string): Promise<Todo>;
-  update(id: number, changes: Partial<Omit<Todo, 'id'>>): Promise<Todo>;
-  destroy(id: number): Promise<void>;
+  update(id: Todo['id'], changes: Partial<Omit<Todo, 'id'>>): Promise<Todo>;
+  destroy(id: Todo['id']): Promise<void>;
 }
 
 export default Persistence;

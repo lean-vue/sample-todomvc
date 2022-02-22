@@ -22,7 +22,7 @@ class LocalPersistence implements Persistence {
     return todo;
   }
 
-  async update(id: number, changes: Partial<Omit<Todo, 'id'>>) {
+  async update(id: Todo['id'], changes: Partial<Omit<Todo, 'id'>>) {
     const todos = loadTodos();
     const todo: Todo = {
       ...(todos.find((t) => t.id === id) as Todo),
@@ -32,7 +32,7 @@ class LocalPersistence implements Persistence {
     return todo;
   }
 
-  async destroy(id: number) {
+  async destroy(id: Todo['id']) {
     const todos = loadTodos();
     saveTodos(todos.filter((t) => t.id !== id));
   }

@@ -2,12 +2,14 @@ import { beforeEach, describe, expect, test } from 'vitest';
 import LocalPersistence from './local-persistence';
 import Persistence from './persistence';
 
+import Todo from '@/model/todo';
+
 const mockTitle = 'Unit Teting';
 const mockUpdatedTitle = 'Unit Testing';
 
 describe('Local Persistence implementation', () => {
   let persistence: Persistence;
-  let createdId = 0;
+  let createdId: Todo['id'] = 0;
 
   beforeEach(() => {
     persistence = new LocalPersistence();
