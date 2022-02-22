@@ -41,6 +41,10 @@ const updateTitle = async (todo: Todo, title: string) => {
     t.id === todo.id ? updatedTodo : t
   );
 };
+const destroyTodo = async (todo: Todo) => {
+  await persistence.destroy(todo.id);
+  state.todos.value = state.todos.value.filter((t) => t.id !== todo.id);
+};
 
 // computed getters
 const filteredTodos = computed(filterTodosByVisibility);
@@ -51,6 +55,7 @@ const useAppStore = () => ({
   createTodo,
   toggleTodo,
   updateTitle,
+  destroyTodo,
   // getters
   filteredTodos,
   hasTodos,
