@@ -33,6 +33,14 @@ const toggleTodo = async (todo: Todo) => {
     t.id === todo.id ? updatedTodo : t
   );
 };
+const updateTitle = async (todo: Todo, title: string) => {
+  const updatedTodo = await persistence.update(todo.id, {
+    title,
+  });
+  state.todos.value = state.todos.value.map((t) =>
+    t.id === todo.id ? updatedTodo : t
+  );
+};
 
 // computed getters
 const filteredTodos = computed(filterTodosByVisibility);
@@ -42,6 +50,7 @@ const useAppStore = () => ({
   // actions
   createTodo,
   toggleTodo,
+  updateTitle,
   // getters
   filteredTodos,
   hasTodos,
