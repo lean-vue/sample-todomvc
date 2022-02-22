@@ -9,6 +9,9 @@ const state = {
   visibility: ref<'all' | 'active' | 'completed'>('all'),
 };
 
+// initializing store asynchronous
+persistence.getAll().then((todos) => (state.todos.value = todos));
+
 // helper
 const filterTodosByVisibility = () =>
   state.visibility.value === 'all'
