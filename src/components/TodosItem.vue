@@ -42,6 +42,7 @@ const cancelEdit = () => {
       class="edit"
       @change="commitEdit"
       @blur="cancelEdit"
+      @keyup.esc="cancelEdit"
     />
     <div v-else class="view">
       <input
