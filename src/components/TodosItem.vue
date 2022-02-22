@@ -5,10 +5,10 @@ defineProps<{ todo: Todo }>();
 </script>
 
 <template>
-  <!-- List items should get the class `editing` when editing and `completed` when marked as completed -->
-  <li class="completed">
+  <!-- List items should get the class `editing` when editing -->
+  <li :class="{ completed: todo.completed }">
     <div class="view">
-      <input class="toggle" type="checkbox" checked />
+      <input class="toggle" type="checkbox" :checked="todo.completed" />
       <label>{{ todo.title }}</label>
       <button class="destroy"></button>
     </div>
