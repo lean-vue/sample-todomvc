@@ -1,40 +1,36 @@
-import Todo from '@/model/todo';
+import { useStorage } from '@vueuse/core';
 import Persistence from './persistence';
+import Todo from '@/model/todo';
 
-// Module private helper
-const loadTodos = (): Todo[] => JSON.parse(localStorage.todos || '[]');
-const saveTodos = (todos: Todo[]) =>
-  (localStorage.todos = JSON.stringify(todos));
-const generateId = () => {
-  const nextId: number = JSON.parse(localStorage.lastId || '0') + 1;
-  localStorage.lastId = nextId;
-  return nextId;
-};
+const todos = useStorage<Todo[]>('todos', []);
+const lastId = useStorage('lastId', 0);
 
 class LocalPersistence implements Persistence {
   async getAll() {
-    return loadTodos();
+    return [...todos.value];
   }
 
   async create(title: string) {
-    const todo: Todo = { id: generateId(), title, completed: false };
-    saveTodos([...loadTodos(), todo]);
+    const nextId = lastId.value + 1;
+    const todo: Todo = { id: nextId, title, completed: false };
+
+    todos.value.push(todo);
+    lastId.value = nextId;
+
     return todo;
   }
 
   async update(id: Todo['id'], changes: Partial<Omit<Todo, 'id'>>) {
-    const todos = loadTodos();
     const todo: Todo = {
-      ...(todos.find((t) => t.id === id) as Todo),
+      ...(todos.value.find((t) => t.id === id) as Todo),
       ...changes,
     };
-    saveTodos(todos.map((t) => (t.id === id ? todo : t)));
+    todos.value = todos.value.map((t) => (t.id === id ? todo : t));
     return todo;
   }
 
   async destroy(id: Todo['id']) {
-    const todos = loadTodos();
-    saveTodos(todos.filter((t) => t.id !== id));
+    todos.value = todos.value.filter((t) => t.id !== id);
   }
 }
 

@@ -14,6 +14,7 @@
     "cypress:run": "cypress run"
   },
   "dependencies": {
+    "@vueuse/core": "^7.6.2",
     "todomvc-app-css": "^2.4.2",
     "vue": "^3.2.31"
   },
