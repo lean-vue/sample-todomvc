@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "vite",
     "format": "prettier --write . --ignore-path .gitignore",
-    "lint": "eslint . --ext .vue,.js,.cjs --fix --ignore-path .gitignore",
+    "lint": "eslint . --ext .vue,.ts,.cjs --fix --ignore-path .gitignore",
     "test": "vitest",
     "build": "vue-tsc --noEmit && vite build",
     "start": "vite preview",
