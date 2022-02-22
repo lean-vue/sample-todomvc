@@ -1,5 +1,9 @@
+<script lang="ts" setup>
+import TodosShell from '@/components/TodosShell.vue';
+</script>
+
 <template>
-  <TodosShell/>
+  <TodosShell />
   <footer class="info">
     <p>Double-click to edit a todo</p>
     <!-- Remove the below line ↓ -->
@@ -18,7 +22,3 @@
     </p>
   </footer>
 </template>
-
-<script lang="ts" setup>
-import TodosShell from "@/components/TodosShell.vue";
-</script>
