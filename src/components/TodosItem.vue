@@ -5,7 +5,7 @@ import { ref } from 'vue';
 
 const props = defineProps<{ todo: Todo }>();
 
-const { toggleTodo, updateTitle } = useAppStore();
+const { toggleTodo, updateTitle, destroyTodo } = useAppStore();
 
 // Editing
 const editMode = ref(false);
@@ -37,7 +37,7 @@ const commitEdit = () => {
         @change="toggleTodo(todo)"
       />
       <label @dblclick="beginEdit">{{ todo.title }}</label>
-      <button class="destroy"></button>
+      <button class="destroy" @click="destroyTodo(todo)"></button>
     </div>
   </li>
 </template>
